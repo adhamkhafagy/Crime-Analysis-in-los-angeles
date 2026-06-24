@@ -99,10 +99,7 @@ plt.show()
 ```
 
 ### Visualization
-
-```text
-Visuals/crime_frequency_by_hour.png
-```
+![Countplot](countplot.png)
 
 ### Insight
 
