@@ -1,6 +1,4 @@
-# Crime-Analysis-in-los-angeles
-
-![Los Angeles skyline](la_skyline.jpg)
+# Crime Analysis in los angeles
 
 Los Angeles, California 😎. The City of Angels. Tinseltown. The Entertainment Capital of the World! 
 
@@ -120,3 +118,120 @@ plt.show()
 ```
 
 **Output:**
+---
+
+![Countplot](countplot.png)
+
+---
+
+## 5 — Peak Crime Hour
+
+```python
+peak_hour = crimes["HOUR OCC"].value_counts()
+peak_crime_hour = peak_hour.idxmax()
+peak_hour.sort_values(ascending=False)
+```
+
+**Output:**
+
+```
+HOUR OCC
+12    13663
+18    10125
+17     9964
+20     9579
+15     9393
+19     9262
+16     9224
+14     8872
+11     8787
+0      8728
+21     8701
+22     8531
+13     8474
+10     8440
+8      7523
+23     7419
+9      7092
+1      5836
+6      5621
+7      5403
+2      4726
+3      3943
+4      3238
+5      3171
+Name: count, dtype: int64
+```
+
+> ✅ **`peak_crime_hour = 12`** — Noon is the single busiest hour for crime in Los Angeles.
+
+---
+
+## 6 — Nighttime Crime Analysis (10 PM – 3 AM)
+
+```python
+night_time = crimes[crimes['HOUR OCC'].isin([22, 23, 0, 1, 2, 3])]
+```
+
+```python
+peak_night_crime_location = (
+    night_time.groupby("AREA NAME", as_index=False)["HOUR OCC"]
+    .count()
+    .sort_values("HOUR OCC", ascending=False)
+    .iloc[0]["AREA NAME"]
+)
+print(peak_night_crime_location)
+```
+
+**Output:**
+
+```
+Central
+```
+
+> ✅ **`peak_night_crime_location = "Central"`** — The Central division records the highest crime volume during nighttime hours (10 PM – 3 AM).
+
+---
+
+## 7 — Victim Age Analysis
+
+```python
+age_bins   = [0, 17, 25, 34, 44, 54, 64, np.inf]
+age_labels = ["0-17", "18-25", "26-34", "35-44", "45-54", "55-64", "65+"]
+
+crimes["Age Bracket"] = pd.cut(crimes["Vict Age"], labels=age_labels, bins=age_bins)
+```
+
+```python
+victim_ages = crimes["Age Bracket"].value_counts()
+print(victim_ages)
+```
+
+**Output:**
+
+```
+Age Bracket
+26-34    47470
+35-44    42157
+45-54    28353
+18-25    28291
+55-64    20169
+65+      14747
+0-17      4528
+Name: count, dtype: int64
+```
+
+> ✅ **Most victimized age group: 26–34** with **47,470 incidents** — nearly 25.6% of all crimes.
+
+---
+
+## 📊 Summary of Findings
+
+| Question | Answer |
+|---|---|
+| 🕛 Peak crime hour | **12 PM (noon)** — 13,663 incidents |
+| 🌙 Highest nighttime crime area | **Central** division |
+| 👤 Most victimized age group | **26–34** years old — 47,470 incidents |
+
+---
+
